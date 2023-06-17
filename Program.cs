@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 using System.Security.Cryptography;
 using System.Windows.Forms;
-using System.IO;
 
 namespace Checksum
 {
@@ -14,13 +10,14 @@ namespace Checksum
         static void Main(string[] args)
         {
             var filePath = args[0];
-            //var filePath = @"D:\Downloads\Microsoft Installers\dotnet-hosting-7.0.5-win.exe";
             byte[] SHA512Bytes = SHA512Checksum(filePath);
             byte[] SHA256Bytes = SHA256Checksum(filePath);
+            byte[] MD5Bytes = MD5Checksum(filePath);
             string SHA512Str = ConvertByteArray(SHA512Bytes);
             string SHA256Str = ConvertByteArray(SHA256Bytes);
+            string MD5Str = ConvertByteArray(MD5Bytes);
 
-            MessageBox.Show($"SHA-512: {SHA512Str}\n\nSHA-256: {SHA256Str}");
+            MessageBox.Show($"SHA-512: {SHA512Str}\n\nSHA-256: {SHA256Str}\n\nMD5: {MD5Str}");
         }
 
         private static byte[] SHA512Checksum(string filePath)
@@ -41,6 +38,17 @@ namespace Checksum
                 using (FileStream file = File.OpenRead(filePath))
                 {
                     return SHA.ComputeHash(file);
+                }
+            }
+        }
+
+        private static byte[] MD5Checksum(string filePath)
+        {
+            using (MD5 MD5 = MD5.Create())
+            {
+                using (FileStream file = File.OpenRead(filePath))
+                {
+                    return MD5.ComputeHash(file);
                 }
             }
         }
