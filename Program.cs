@@ -13,11 +13,24 @@ namespace Checksum
             byte[] SHA512Bytes = SHA512Checksum(filePath);
             byte[] SHA256Bytes = SHA256Checksum(filePath);
             byte[] MD5Bytes = MD5Checksum(filePath);
+            byte[] SHA1Bytes = SHA1Checksum(filePath);
             string SHA512Str = ConvertByteArray(SHA512Bytes);
             string SHA256Str = ConvertByteArray(SHA256Bytes);
             string MD5Str = ConvertByteArray(MD5Bytes);
+            string SHA1Str = ConvertByteArray(SHA1Bytes);
 
-            MessageBox.Show($"SHA-512: {SHA512Str}\n\nSHA-256: {SHA256Str}\n\nMD5: {MD5Str}");
+            MessageBox.Show($"SHA-512: {SHA512Str}\n\nSHA-256: {SHA256Str}\n\nSHA-1: {SHA1Str}\n\nMD5: {MD5Str}");
+        }
+
+        private static byte[] SHA1Checksum(string filePath)
+        {
+            using (SHA1 SHA = SHA1.Create())
+            {
+                using (FileStream file = File.OpenRead(filePath))
+                {
+                    return SHA.ComputeHash(file);
+                }
+            }
         }
 
         private static byte[] SHA512Checksum(string filePath)
